@@ -1,3 +1,4 @@
+import {ShortlistDemo} from './components/ShortlistDemo';
 import {CatalogView} from './components/CatalogView';
 import {TutorialProvider} from './components/Tutorial';
 import {PublicListingView} from './components/PublicListingView';
@@ -32,6 +33,7 @@ const RouterView: React.FC = () => {
   if (route.type.startsWith('group_') && (!group || group.id !== (route as any).groupId)) return <main className="p-8 max-w-lg mx-auto"><h1 className="text-2xl font-serif mb-4">FairRoom</h1><p role="status">{error || 'Opening your group…'}</p><a className="underline" href="/">Back to home</a></main>;
 
   switch (route.type) {
+    case 'shortlist': return <ShortlistDemo/>;
     case 'catalog': return <CatalogView/>;
     case 'landing':
       return <LandingView />;

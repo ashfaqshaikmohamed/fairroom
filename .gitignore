@@ -9,3 +9,5 @@ data/
 *.db
 *.sqlite
 *.sqlite3
+shortlist-dist/
+.vercel/

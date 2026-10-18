@@ -95,3 +95,7 @@ Includes matching, room allocation, exact cents, privacy, acceptance revisions, 
 - Never use `VITE_` prefixes for secrets — that would embed them in the browser bundle
 - Never paste keys, phone numbers, or invite tokens into chat, GitHub, or screenshots
 - Build a clean archive excluding `.env`, databases, receipts, `node_modules`, `dist`, and caches
+
+### Saved Zillow / iMessage walkthrough
+
+For the standalone recording flow (`FairRoom start` → each roommate's preference reply → five Zillow links and a mobile shortlist), see [SHORTLIST-DEMO.md](SHORTLIST-DEMO.md). The `/shortlist` page also accepts preferences locally and saves bookmarks on that device. This optional walkthrough uses ten recorded public Zillow building pages, not live scraping or verified survey matches. Its Mac listener sends through the signed-in Messages identity, independently of the hosted Photon adapter. The guide includes the static-only Vercel package command and the exact boundaries of this demo.

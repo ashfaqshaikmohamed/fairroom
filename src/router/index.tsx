@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 export type AppRoute =
   | { type: 'landing' }
   | { type: 'catalog' }
+  | { type: 'shortlist' }
   | { type: 'setup' }
   | { type: 'group_matches'; groupId: string }
   | { type: 'group_members'; groupId: string }
@@ -32,6 +33,8 @@ export function parsePath(pathname: string, hash: string): AppRoute {
   if (effectivePath === '/' || effectivePath === '') {
     return { type: 'landing' };
   }
+
+  if (effectivePath === '/shortlist') return {type:'shortlist'};
 
   if (effectivePath === '/homes') return {type:'catalog'};
 
