@@ -1,3 +1,5 @@
+> Optional live mode: set `DEMO_MODE=false`. The keyless submission demo uses the README quick start and does not require these services. Live behavior is not verified by mock/API tests.
+
 # Accounts and keys
 
 The local recorded web demo needs **none**. Live iMessage needs Photon and a reachable HTTPS app.

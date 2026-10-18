@@ -245,12 +245,10 @@ function initTables(db: Database) {
 }
 
 export function seedDemoFixtures(db: Database) {
-  if (process.env.DEMO_MODE === 'true') {
-    return seedDemoModeData(db);
-  }
   if (!fs.existsSync(FIXTURES_PATH)) return;
 
   const fixtures = JSON.parse(fs.readFileSync(FIXTURES_PATH, 'utf-8'));
+  if (process.env.DEMO_MODE === 'true') seedDemoModeData(fixtures);
   const g = fixtures.group;
 
   for(const table of ['agent_pending','photon_inbox']) if(db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name=?",[table])[0]) db.run(`DELETE FROM ${table} WHERE group_id=?`,[g.id]);
@@ -326,131 +324,22 @@ export function seedDemoFixtures(db: Database) {
   saveDb(db);
 }
 
-/**
- * DEMO_MODE seeding: three fake roommates (Alex, Sam, Jordan) with fake phone numbers,
- * sample survey responses, and sample listings. No keys, no real phone numbers, no ngrok.
- */
-function seedDemoModeData(db: Database) {
-  const now = new Date().toISOString();
-  const groupId = 'group-demo-household';
-  const members = [
-    { id: 'member-alex', name: 'Alex', phone: '+15555550101', organizer: 1 },
-    { id: 'member-sam', name: 'Sam', phone: '+15555550102', organizer: 0 },
-    { id: 'member-jordan', name: 'Jordan', phone: '+15555550103', organizer: 0 },
-  ];
-
-  db.run(`DELETE FROM outbound_queue WHERE group_id = ?`, [groupId]);
-  db.run(`DELETE FROM group_conversations WHERE group_id = ?`, [groupId]);
-  db.run(`DELETE FROM sessions WHERE group_id = ?`, [groupId]);
-  db.run(`DELETE FROM members WHERE group_id = ?`, [groupId]);
-  db.run(`DELETE FROM groups WHERE id = ?`, [groupId]);
-  db.run(`DELETE FROM member_decisions WHERE group_id = ?`, [groupId]);
-  db.run(`DELETE FROM recommendation_events WHERE group_id = ?`, [groupId]);
-  db.run(`DELETE FROM rent_split_proposals WHERE group_id = ?`, [groupId]);
-  db.run(`DELETE FROM scout_state WHERE group_id = ?`, [groupId]);
-  for (const table of ['agent_pending', 'photon_inbox']) {
-    if (db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name=?", [table])[0]) {
-      db.run(`DELETE FROM ${table} WHERE group_id=?`, [groupId]);
-    }
+/** Keep the tested fixture IDs/room facts aligned with demo routes and UI. */
+function seedDemoModeData(fixtures: {group: {name:string}; members: Array<any>}) {
+  fixtures.group.name = 'Demo Household';
+  const people: Record<string, {name:string;phone:string}> = {
+    'member-maya': {name:'Alex',phone:'+15555550101'},
+    'member-sam': {name:'Sam',phone:'+15555550102'},
+    'member-leo': {name:'Jordan',phone:'+15555550103'},
+  };
+  for (const member of fixtures.members) {
+    const person = people[member.id];
+    if (!person) throw new Error('Unexpected demo fixture member');
+    member.displayName = person.name;
+    member.phoneNumber = person.phone;
+    member.inviteToken = `inv_demo_${crypto.randomBytes(24).toString('hex')}`;
+    if (member.survey) member.survey.phoneAlertsOptIn = false;
   }
-
-  db.run(
-    `INSERT INTO groups (id, name, organizer_member_id, is_fixture, preference_revision, created_at)
-     VALUES (?, ?, ?, 1, 1, ?)`,
-    [groupId, 'Demo Household', members[0].id, now]
-  );
-
-  db.run(
-    `INSERT INTO scout_state (
-      group_id, is_active, last_check_at, last_digest_at, daily_digest_count,
-      include_needs_verification, dispatched_listing_ids_json, demo_delivery_armed, updated_at
-    ) VALUES (?, 1, null, null, 0, 0, '[]', 0, ?)`,
-    [groupId, now]
-  );
-
-  for (const m of members) {
-    const survey = JSON.stringify({
-      privateCapCents: m.organizer ? 200000 : 150000,
-      acceptableCities: ['Cambridge', 'Somerville'],
-      acceptableNeighborhoods: ['Inman Sq', 'Central Sq', 'Porter Sq'],
-      moveInEarliest: '2026-12-01',
-      moveInLatest: '2027-01-15',
-      petRequirement: { hasCat: false, hasDog: false, allergicCats: false, allergicDogs: false },
-      hardMustHaves: ['dishwasher'],
-      optionalNiceToHaves: ['in_unit_laundry', 'natural_light'],
-      bedroomOccupancy: 'private_bedroom',
-      isReady: true,
-      phoneAlertsOptIn: true,
-      provenance: 'self',
-      updatedAt: now
-    });
-    const inviteToken = `inv_demo_${m.name.toLowerCase()}_${crypto.randomBytes(8).toString('hex')}`;
-    db.run(
-      `INSERT INTO members (id, group_id, invite_token, display_name, phone_number, is_organizer, survey_json, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [m.id, groupId, inviteToken, m.name, m.phone, m.organizer, survey, now]
-    );
-    const sessionToken = `sess_demo_${generateToken()}`;
-    db.run(
-      `INSERT INTO sessions (token, member_id, group_id, created_at) VALUES (?, ?, ?, ?)`,
-      [sessionToken, m.id, groupId, now]
-    );
-  }
-
-  // Sample listings for demo mode
-  const listings = [
-    {
-      id: 'demo-sunrise',
-      address: 'Sunrise Apartments',
-      city: 'Cambridge',
-      neighborhood: 'Inman Sq',
-      bedrooms: 3,
-      bathrooms: 2,
-      baseRentCents: 360000,
-      sharedCosts: [{ name: 'Shared fees', amountCents: 8000, status: 'known' }, { name: 'Utilities', amountCents: 14000, status: 'estimated' }],
-      availableDate: '2026-12-01',
-      amenities: { cats_allowed: true, dogs_allowed: false, dishwasher: true, in_unit_laundry: true, natural_light: true, balcony: true, parking_available: false },
-      photos: ['/images/demo-sunrise.webp'],
-      source: 'Sample demo home'
-    },
-    {
-      id: 'demo-river',
-      address: 'River View Loft',
-      city: 'Somerville',
-      neighborhood: 'Union Sq',
-      bedrooms: 3,
-      bathrooms: 1,
-      baseRentCents: 320000,
-      sharedCosts: [{ name: 'Shared fees', amountCents: 6000, status: 'known' }, { name: 'Utilities', amountCents: 12000, status: 'estimated' }],
-      availableDate: '2026-12-01',
-      amenities: { cats_allowed: true, dogs_allowed: true, dishwasher: false, in_unit_laundry: false, natural_light: true, balcony: false, parking_available: true },
-      photos: ['/images/demo-river.webp'],
-      source: 'Sample demo home'
-    },
-    {
-      id: 'demo-hill',
-      address: 'Hilltop House',
-      city: 'Cambridge',
-      neighborhood: 'Porter Sq',
-      bedrooms: 3,
-      bathrooms: 2,
-      baseRentCents: 390000,
-      sharedCosts: [{ name: 'Shared fees', amountCents: 10000, status: 'known' }, { name: 'Utilities', amountCents: 16000, status: 'estimated' }],
-      availableDate: '2027-01-01',
-      amenities: { cats_allowed: true, dogs_allowed: false, dishwasher: true, in_unit_laundry: true, natural_light: true, balcony: true, parking_available: true },
-      photos: ['/images/demo-hill.webp'],
-      source: 'Sample demo home'
-    }
-  ];
-
-  for (const l of listings) {
-    db.run(
-      `INSERT OR REPLACE INTO listings (id, canonical_url, source_name, captured_at, catalog_revision, address, city, neighborhood, bedrooms, bathrooms, base_rent_cents, shared_costs_json, available_date, lease_duration_months, security_deposit_cents, broker_fee_cents, amenities_json, rooms_json, photos_json, contact_json, raw_audit_json) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [l.id, '', l.source, now, 1, l.address, l.city, l.neighborhood, l.bedrooms, l.bathrooms, l.baseRentCents, JSON.stringify(l.sharedCosts), l.availableDate, 12, null, null, JSON.stringify(l.amenities), JSON.stringify([]), JSON.stringify(l.photos), JSON.stringify({}), JSON.stringify({ sourceListingId: l.id, originalCapturedText: 'Sample demo home', verifiedBy: 'Demo data', verifiedAt: '' })]
-    );
-  }
-
-  saveDb(db);
 }
 
 function seedListingsIfEmpty(db: Database) {

@@ -4,7 +4,7 @@
 
 “Three roommates can all like the same apartment and still disagree about who pays what. FairRoom lives in their group chat, learns what each person needs privately, and brings back homes with a room and a workable rent share for everyone.”
 
-Make Photon and the group conversation the main interaction. The polished website is the private preference form and the shared decision surface.
+For submission rehearsal, use the keyless web conversation with DEMO_MODE=true. Real messaging is a separate optional demonstration.
 
 ## Built-in guided walkthrough
 
@@ -12,8 +12,8 @@ Click **tutorial** in the landing navigation or **Take the walkthrough** below t
 
 ## Web demo — no keys
 
-1. Start the app and open the landing page at 1440 × 1000. Click **Meet FairRoom**. This resets only the sample group; phone sending stays off.
-2. In Conversation select **Sam**. Open **roommates**, then **Add my preferences**. Maya and Leo are already ready.
+1. Start the app and open the landing page at 1440 × 1000. Click **Meet FairRoom**. This preserves the sample group; use Reset demo for a fresh take. Phone sending stays off in demo mode.
+2. In Conversation select **Sam**. Open **roommates**, then **Add my preferences**. Alex and Jordan are already ready in demo mode.
 3. Sam’s saved budget is $1,100. Set bedroom minimum to **120 sq ft**, leave bathroom flexible, and keep the sample locations/dates. Continue through the form and choose **Find our homes**. Keep phone alerts off for the web recording.
 4. Open **homes**. Show the **five matching homes** and click **142 Hampshire St, Apt 2** (the Cambridge Courtyard sample, reference C1). The proposed shares are **$1,520 / $1,280 / $1,040**. Those are computed, not screenshots or fixed response text.
 5. **Review split**. Point out the private bathroom and different room sizes. Sam’s budget check is visible only in Sam’s session. Accept the current revision and share it to the group chat.

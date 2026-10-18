@@ -588,7 +588,7 @@ apiRouter.post('/groups/:id/decisions', async (req, res) => {
   }
 
   if (!memberId) {
-    // Fallback to first member if unauthenticated demo interaction
+    // Legacy fallback; group middleware above already requires a valid member session.
     const mRes = db.exec("SELECT id FROM members WHERE group_id = ? LIMIT 1", [groupId]);
     memberId = mRes[0]?.values[0]?.[0] as string;
   }
@@ -1010,7 +1010,7 @@ apiRouter.post('/groups/:id/messages', async (req, res) => {
   };
   addChatMessage(db, userMsg);
 
-  if(/^@?fairroom\b|^(?:find|search|split|like|pass|interested|pause|resume|stop|help|status|confirm|accept)\b|^I (?:need|require|want|don't|do not)\b/i.test(trimmedText)) {
+  if(/^@?fairroom\b|^(?:find|search|split|like|pass|interested|pause|resume|stop|help|status|confirm|accept|saved|bookmarks|shortlist|check|verify)\b|^I (?:need|require|want|don't|do not)\b/i.test(trimmedText)) {
     const reply=await answerAgent(db,groupId,senderMemberId,trimmedText);
     addChatMessage(db,{id:'agent_'+generateToken(),groupId,senderType:'scout',senderName:'FairRoom',text:reply,deliveryStatus:'delivered',transport:'web',createdAt:new Date().toISOString()});
   }

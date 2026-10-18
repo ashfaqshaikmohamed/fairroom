@@ -1,3 +1,5 @@
+> Historical notes for earlier builds, not the current verification report. See HANDOFF.md for the demo-mode workflow and rerun its checks for current results. Archive packaging and browser/device claims below have not been reverified in this audit.
+
 # Review notes — October 16, 2026
 
 ## Automated

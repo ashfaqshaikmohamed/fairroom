@@ -1,63 +1,17 @@
 # Demo disclosure locations
 
-Generated audit of the relevant interface, code and documentation. The actual code and wording are at these line references. No sponsor run is claimed by a sample result.
+Stable file/function references for the current source (line numbers change as code is edited):
 
-- `src/components/LandingView.tsx:15` — Product interface disclosure
-- `src/components/LandingView.tsx:16` — Product interface disclosure
-- `src/components/ProductPreview.tsx:11` — Product interface disclosure
-- `src/components/ProductPreview.tsx:12` — Product interface disclosure
-- `src/components/ProductPreview.tsx:13` — Product interface disclosure
-- `src/components/ProductPreview.tsx:14` — Product interface disclosure
-- `src/components/ProductPreview.tsx:15` — Product interface disclosure
-- `src/components/ListingCheckPanel.tsx:7` — Product interface disclosure
-- `src/components/ListingCheckPanel.tsx:13` — Product interface disclosure
-- `src/components/ListingCheckPanel.tsx:14` — Product interface disclosure
-- `src/components/ListingCheckPanel.tsx:17` — Product interface disclosure
-- `src/components/ListingCheckPanel.tsx:20` — Product interface disclosure
-- `src/components/ListingCheckPanel.tsx:22` — Product interface disclosure
-- `src/components/PublicListingView.tsx:8` — Product interface disclosure
-- `src/components/MatchesWorkspaceView.tsx:25` — Product interface disclosure
-- `src/server/listingCheck.ts:3` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:6` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:16` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:18` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:23` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:31` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:32` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:33` — Implementation or technical documentation distinction
-- `src/server/listingCheck.ts:36` — Implementation or technical documentation distinction
-- `src/server/agent.ts:22` — Implementation or technical documentation distinction
-- `src/server/agent.ts:24` — Implementation or technical documentation distinction
-- `src/server/agent.ts:25` — Implementation or technical documentation distinction
-- `src/server/agent.ts:26` — Implementation or technical documentation distinction
-- `src/server/agent.ts:30` — Implementation or technical documentation distinction
-- `src/server/agent.ts:38` — Implementation or technical documentation distinction
-- `src/server/agent.ts:44` — Implementation or technical documentation distinction
-- `src/server/agent.ts:73` — Implementation or technical documentation distinction
-- `src/server/agent.ts:76` — Implementation or technical documentation distinction
-- `src/server/agent.ts:100` — Implementation or technical documentation distinction
-- `src/server/agent.ts:110` — Implementation or technical documentation distinction
-- `local-bridge/bridge.ts:17` — Implementation or technical documentation distinction
-- `local-bridge/bridge.ts:18` — Implementation or technical documentation distinction
-- `local-bridge/bridge.ts:21` — Implementation or technical documentation distinction
-- `local-bridge/bridge.ts:28` — Implementation or technical documentation distinction
-- `local-bridge/bridge.ts:48` — Implementation or technical documentation distinction
-- `README.md:23` — Implementation or technical documentation distinction
-- `README.md:33` — Implementation or technical documentation distinction
-- `README.md:35` — Implementation or technical documentation distinction
-- `README.md:59` — Implementation or technical documentation distinction
-- `README.md:65` — Implementation or technical documentation distinction
-- `README.md:67` — Implementation or technical documentation distinction
-- `README.md:69` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:7` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:10` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:11` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:13` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:16` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:23` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:28` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:37` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:38` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:39` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:40` — Implementation or technical documentation distinction
-- `DEMO-AND-SPONSOR-TALKING-POINTS.md:44` — Implementation or technical documentation distinction
+- `src/server/db.ts`, `seedDemoModeData`: fake names/numbers applied to the routable sample household; fixture room facts remain illustrative.
+- `src/components/LandingView.tsx` and `ProductPreview.tsx`: sample/illustrative product-preview copy.
+- `src/components/ListingCheckPanel.tsx`: Sample review label and no-model-call caption.
+- `src/server/listingCheck.ts`, `sampleListingReview`: prepared output separate from real provider receipts.
+- `src/server/routes.ts`, `/check/sample`: sample-only endpoint without a Factory cache write.
+- `src/server/agent.ts`, `interpret`: deterministic fallback when model credentials are unavailable.
+- `src/server/photon.ts`, `photonEnabled`: demo mode prevents hosted sends.
+- `server.ts`: demo mode skips local/hosted messaging workers and the scheduler.
+- `src/components/PublicListingView.tsx` and `CatalogView.tsx`: saved-listing availability disclosures.
+- `local-bridge/bridge.ts`: local transport uses the Mac’s Messages identity.
+- `README.md`, `HANDOFF.md` and `DEMO-AND-SPONSOR-TALKING-POINTS.md`: demo-first workflow and unverified optional service boundaries.
+
+No sample review, web message or mocked test is evidence of live sponsor service use. Public listing snapshots do not prove current availability.

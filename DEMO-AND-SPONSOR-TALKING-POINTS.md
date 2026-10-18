@@ -4,9 +4,9 @@
 FairRoom helps roommates find a home they can agree on, where they already talk. It combines preferences, ranks homes, proposes room-dependent rent shares, and keeps saved choices in the conversation. Its Digital Trust contribution is explicit costs, private budgets, reproducible calculations and visible uncertainty.
 
 ## A short working demo
-1. Keep the local server and configured Messages bridge running. Use the sample household on the website.
-2. Have the mapped participant send `FairRoom find homes` in the configured conversation.
-3. Send `FairRoom split C1`, then `FairRoom like C1` and `FairRoom saved`.
+1. Start with DEMO_MODE=true and open Meet FairRoom. Complete Sam’s saved survey.
+2. In the web conversation send `find homes`.
+3. Send `split C1`, then `like C1` and `saved`.
 4. On the website, inspect that home and its calculated split. Expand **Before you commit**, then **Preview sample review**.
 5. Show the missing-cost checks and copy the broker questions. The sample review requires no key.
 
@@ -39,6 +39,6 @@ The intended benefit is managed model routing with observable requests. The loca
 - `src/components/ListingCheckPanel.tsx`: Sample review label and no-model-call caption.
 - `src/server/agent.ts`: no-key deterministic fallback and actual-call counters.
 - `scripts/test-agent-demo.ts`: mocked gateway test, explicitly no paid calls.
-- `README.md`: Keyless demo mode and current live-verification status.
+- `README.md`: demo quick start and optional integration boundaries.
 
 These distinctions belong in technical documentation and the sample output label. Ordinary product copy can focus on finding a home together.

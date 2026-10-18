@@ -1,3 +1,5 @@
+> Optional live mode: set `DEMO_MODE=false`. The keyless submission demo uses the README quick start and does not require these services. Live behavior is not verified by mock/API tests.
+
 # Photon 2.0 setup
 
 FairRoom uses only the official Photon beta SDK for messaging. No live Photon account has been tested in this review.

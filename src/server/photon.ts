@@ -1,7 +1,7 @@
 import { Photon, ApiError } from '@photon-ai/api';
 import type { DeliveryStatus } from '../types';
 export const photonConfigured = () => !!process.env.PHOTON_API_KEY && /^pho_prj_/.test(process.env.PHOTON_PROJECT_ID || '');
-export const photonEnabled = () => photonConfigured() && process.env.PHOTON_ENABLED === 'true';
+export const photonEnabled = () => process.env.DEMO_MODE !== 'true' && photonConfigured() && process.env.PHOTON_ENABLED === 'true';
 export function photonClient() {
   if (!photonConfigured()) throw new Error('Add your Photon project ID and API key to .env.');
   return new Photon({headers:{Authorization:`Bearer ${process.env.PHOTON_API_KEY}`},timeoutMs:12000,retry:false});

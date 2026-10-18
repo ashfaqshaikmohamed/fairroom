@@ -1,61 +1,53 @@
-# FairRoom handoff — October 17, 2026
+# FairRoom submission handoff
 
-## Current source and launch
-The active code is in `outputs/fairroom-final/current code`, NOT its parent or the old Google Studio exports. The parent folder was rearranged while a server was running; that server was stopped and restarted from this folder. From this folder run `npm run dev`. Node 24 is installed. Local server uses port 4300 from .env. The user's ngrok tunnel forwards https://your-app.ngrok-free.dev to 4300. Keep both processes and the Mac awake. Do not run concurrent servers against this sql.js database.
+## Project and default demo
+The git root is `outputs/fairroom-final/current code`; its parent is not the project. Use Node.js 24+. From the git root:
 
-## Latest verified outcome
-The local iMessage listener received the brother's `FairRoom start`, submitted one reply, and the user confirmed that reply arrived. It runs in the existing two-person conversation, sending from the user's own Apple Messages identity. It is NOT a separate third participant or the hosted Photon number. Incoming commands must come from the brother. Replies begin `FairRoom ·`. Three fictional roommate profiles are already ready. Only the greeting has been confirmed end-to-end on the phone; the remaining commands have passed local agent tests but need a phone rehearsal.
+```sh
+npm install
+cp -n .env.example .env
+npm run dev
+```
 
-## Why it previously failed
-Photon's imessage-kit 3.0.0 queries message.ck_chat_id, absent on this Mac. The local listener crashed before processing. `local-bridge/patch-sdk.mjs` replaces that SELECT expression with NULL; routing still uses the joined chat GUID. It modifies SDK files only, never Apple's database. It is wired into local-bridge's postinstall. Reapply with `node local-bridge/patch-sdk.mjs` if reinstalling. This patch needs reevaluation when upgrading the SDK.
+Open http://localhost:3000. `PORT` overrides the application port; development hot reload uses the next port. Keep one app process per database. `npm run build` followed by `NODE_ENV=production npm start` serves the production build on the same default port.
 
-## Local bridge
-- `local-bridge/bridge.ts`: Spectrum + localIMessage adapter; one exact chat ID, explicitly mapped senders, inbound text only, FairRoom prefix, timestamp cutoff, durable dedup, no retries after an uncertain send.
-- `local-bridge/configure-demo-dm.ts`: finds the configured consenting brother's existing direct chat, writes local bridge settings to .env. Normalizes phone formatting. Does not send.
-- `local-bridge/list-groups.ts`: only lists exact named groups (default FairRoom Demo), not the user's whole chat inventory.
-- Local SDK dependencies are isolated in `local-bridge/package.json`; install with `npm install --prefix local-bridge`.
-- Enabled in server.ts by FAIRROOM_LOCAL_IMESSAGE_ENABLED=true. To stop this bridge set false and restart.
-- FAIRROOM_LOCAL_MEMBER_MAP maps the brother to fictional member-sam. This is a declared sample demo, not real onboarding or his actual housing profile.
-- Native group support is implemented by the adapter but NOT live-tested with 3 participants; user has only two available. Do not call the direct-message demonstration a verified group test.
-- Local scheduled messages and website mirroring of local replies are NOT implemented. No arbitrary personal conversations are authorized.
+`.env.example` defaults to `DEMO_MODE=true`. Copying it is required: the server does not implicitly enable demo mode when the variable is absent. Demo mode skips the Photon worker, local iMessage bridge and scheduler, and prevents hosted message sends. No keys or tunnel are required with the example configuration. Optional model/review services stay disabled or unconfigured by default.
 
-## Photon 2.0
-Hosted private iMessage test previously delivered and user confirmed. @photon-ai/api 0.5.0. Existing configured line is shared. Native group creation returned HTTP422 SPACE_REQUIRES_OWNED_AGENT; SDK also defines SHARED_LINE_GROUP_UNSUPPORTED. Provisioning a paid dedicated line was not authorized. Do not bypass these restrictions or claim local sends came through hosted Photon 2.0. Accurate description: Photon 2.0 for hosted private messages, Photon Spectrum's local adapter for the Mac demo. Sponsor eligibility of the combined setup remains organizer-dependent.
+## Demo flow
+Click **Meet FairRoom** to open Sam’s sample session. The fixture household contains Alex, Sam and Jordan with fake phone numbers. Alex and Jordan are ready; finish Sam’s saved preferences to generate the five-home shortlist. Open **Homes → Review split**, then **Conversation** and send `split C1`, `like C1`, and `saved`. The tutorial and Reset demo recreate this same household.
 
-## App and data
-React/Vite + Express/TypeScript + sql.js. Database: data/fairroom.sqlite. Keep one writer process. The app has saved listing snapshots, fictional demonstration homes, preference forms, deterministic matching, room allocation, rent proposal revisions/acceptances, bookmarks, and optional scheduled checks of the stored catalog. It does not continuously scrape new listings. Unknown room facts are not invented. A budget-fitting proposal is not a proof of mathematical envy-freeness or universal fairness.
+The existing internal IDs (`group-elm-trio`, `member-maya`, `member-sam`, `member-leo`) are retained for compatibility; the displayed names in demo mode are Alex, Sam and Jordan. With `DEMO_MODE=false`, the original fixtures remain unchanged for the regression suite. Sample room facts and photos are illustrative; matching, budget checks, cents, proposals, saves and chat state are computed.
 
-Key files: src/server/agent.ts, db.ts, photon.ts, photonWorker.ts, deliveryService.ts, notificationSchedule.ts; src/engine/matching.ts, groupPlan.ts, rentSplit.ts; server.ts; src/server/linkPreview.ts.
+## Implementation
+React/Vite frontend, Express/tsx server, sql.js persistence. Key files: `server.ts`, `src/server/db.ts`, `routes.ts`, `agent.ts`, `deliveryService.ts`, and `src/engine/`. `FAIRROOM_DATA_DIR` changes the runtime database location, not the bundled fixture location. Do not run multiple writers against one database.
 
-`FairRoom saved` now returns the requesting member's saved homes; `like C1` saves and `pass C1` removes from that shortlist. No new authentication or real account service was added. Existing website authorization must be audited before making production privacy claims.
+Group APIs require member sessions and enforce group membership. Public demo-session/reset endpoints intentionally expose fictional fixtures. Public listing/catalog pages contain listing details, not private surveys. This is a hackathon authorization model, not a production identity/recovery service. Missing costs and room facts remain unknown; a rent proposal is not an envy-free guarantee or a lease.
 
-## Rehearsal (brother sends, user records incoming/replies)
-1. FairRoom start — sample-data disclosure.
-2. FairRoom find homes — five matches, proposed shares, public listing links.
-3. FairRoom split C1 — room-specific proposal, total, version.
-4. FairRoom like C1 — saved for the mapped fictional member.
-5. FairRoom saved — retrieve the saved home without leaving Messages.
-6. Optional FairRoom I need parking — explicit confirmation code before mutation. Prefix the confirmation with FairRoom too. This changes later results, so record the baseline first.
-Keep phone recording free of other people's private messages. The website and rich link preview are optional detail views. Public link metadata exists; actual rich-card appearance on iPhone remains unverified. Ngrok may show an interstitial.
+## Optional real iMessage mode — outside the submission smoke test
+Set `DEMO_MODE=false` only when intentionally configuring live services. Hosted Photon needs project credentials and a group-capable line; a shared line does not establish native group support. The Mac bridge is a separate transport using the signed-in Mac’s Messages identity, not a new agent number. Install its dependencies separately with `npm install --prefix local-bridge`.
 
-## Tests run
-npm run lint; npm test; npm run build passed before the final SDK compatibility patch. scripts/test-agent-demo.ts passed top-five count, split, save/retrieve/pass, mocked Chalk routing, model outage fallback. SDK query after patch succeeded; listener stayed active and live greeting arrived. These are not live Chalk or Factory tests. Build has a >500KB chunk warning, not a build failure.
+The real local household reads `FAIRROOM_TEST_RECIPIENT`, `FAIRROOM_GROUP_TEST_MEMBER` and optional `FAIRROOM_SISTER_PHONE`. Use country-code format. It requires the selected conversation, private invitations, completed surveys, consent and a public HTTPS app URL for phone links. See `PHONE-DEMO-SETUP.md`. No current keys, private database contents, phone receipts or live device setup were inspected in the submission audit. Do not describe web delivery or mock tests as verified iMessage delivery.
 
-## Secrets / accounts
-Never print .env, commit it, or send it to another AI. Existing keys remain local. Do not distribute current code.zip: it was created outside the packaging workflow and may contain .env and private database/receipts. Build a clean archive excluding .env, databases, receipts, node_modules, .tools, dist and caches.
-Photon: PHOTON_API_KEY, PHOTON_PROJECT_ID, PHOTON_AGENT_HANDLE, PHOTON_ENABLED; PUBLIC_APP_URL for links. OpenAI: OPENAI_API_KEY and OPENAI_MODEL if used. ngrok token belongs in ngrok's config, not application source. Local iMessage bridge needs no new paid API key.
-Optional Chalk routing is implemented but UNCONFIGURED/UNVERIFIED live: AI_PROVIDER=chalk, CHALK_ROUTER_API_KEY, CHALK_ENV_ID, CHALK_MODEL. Gateway URL is https://api.chalk.ai/v1/router/responses; X-Chalk-Env-Id header. Uses model for intent classification only, then deterministic tools. Configure a provider connection and scoped gateway key in Chalk dashboard. Default commands continue without a model. Do not claim evaluation results from mocked tests are Chalk-hosted evals.
+The local SDK compatibility patch modifies SDK files only, not Apple’s database; reevaluate it when upgrading. Keep Messages, the local process and any required tunnel running for an intentional live demo. Local replies are not mirrored into the web thread automatically.
 
-## Remaining work in priority order
-1. Rehearse find/split/save/saved on actual phones; inspect local_imessage_inbox status without exposing message bodies. Never blindly retry an uncertain outbound send.
-2. Complete handoff demo recording showing actual messages, fictional labels, and optional website details.
-3. Chalk account/credits, configure gateway, run a real request and record trace; deploy a repeatable eval set for budget enforcement, unavailable facts, unauthorized updates and duplicates.
-4. Optional Factory product feature: runtime listing-data audit/adapter repair in an isolated workspace; install Droid SDK AND CLI, authenticate, constrain files/tools, validate extracted facts and require review. Not implemented. No model-training claim.
-5. Optional Daytona: run that parser and its tests in a disposable sandbox with no private member records/secrets. Not implemented.
-6. Multi-channel: do not present Telegram/voice as working. Add only after a real configured channel can be verified end-to-end. Use one shared agent engine but platform-specific identity/consent.
-7. Package source safely, update README/demo video with exact integrations and limitations. No submission sent automatically.
+## Optional sponsor integrations
+Factory: `src/server/integrations/factory.ts` implements runtime evidence review using three restricted tools. Requests require an organizer session and localhost access, are rate-limited and cached. Credentials and a successful real run are required; the prepared sample review is not a Factory call.
 
-## Latest update — Factory/Chalk scope only
-User removed Daytona. SDK removed. Factory SDK and project-local Droid 0.174.0 installed. New runtime review implementation: src/server/integrations/factory.ts, invoked via authenticated group listing-check POST, organizer-only, additionally localhost-only to prevent public fixture sessions triggering paid work. GET returns deterministic checks and saved review. Factory is off pending FACTORY_API_KEY + FACTORY_ENABLED=true; never claim live verified. Chalk credentials also still absent. evals/intent-cases.json + scripts/evaluate-chalk.ts provide ten live-gateway tests with model-success counters so fallback cannot masquerade as gateway success.
+Chalk: optional structured intent routing in `src/server/agent.ts`. `npm run eval:chalk` makes live requests and records local evaluation results; it is not Chalk-hosted Agent Evals. Core commands and money calculations work without a model. No live Factory or Chalk verification is claimed. No Daytona integration is included.
 
-UI: ListingCheckPanel.tsx in Homes; minimal expandable evidence and broker questions. Missing listing photos use unavailable.svg rather than fabricated stock interior. Landing Meet FairRoom now preserves existing fixture state instead of resetting the live messaging demo. Rent drawer no longer initially labels base rent as complete monthly total. Keyboard focus/reduced-motion styles added. 37 isolated API checks passed, typecheck and build passed. API test subprocess explicitly disables local Messages, cloud messaging, scheduler and paid integrations. Desktop drawer and narrow evidence panel inspected through CUA; no final video exported. RECORDING-SCRIPT.md is the actual shot list, not a completed video. Complete final review/recording only after live sponsor credentials and results are available.
+## Verification
+Run from the git root:
+
+```sh
+npx tsc --noEmit
+npx vite build
+npm test
+npm run test:api
+npm run test:provider
+node --import tsx scripts/test-demo-mode.ts
+```
+
+The original API/provider tests select `DEMO_MODE=false` and use temporary databases/mocks. The additional demo smoke test uses `.env.example`, a temporary database and port 3000; it never loads the private `.env`. If 3000 is occupied, use `TEST_PORT=3199 node --import tsx scripts/test-demo-mode.ts`. It checks all three survey sessions, five matches, exact rent totals, scout/chat/saves, reset and disabled bridge startup.
+
+## Boundaries and remaining verification
+Do not read, print or commit `.env`, runtime data, databases or private invitation files. No commits/pushes are part of this audit. Read `DEMO-GUIDE.md` for the web demo and `DEMO-AND-SPONSOR-TALKING-POINTS.md` for accurate sponsor descriptions. A clean clone installation and browser/device rendering must be distinguished from the API-based smoke test; neither live messaging nor sponsor calls are verified by that test. Chunk-size/install-script warnings alone do not mean the demo failed.

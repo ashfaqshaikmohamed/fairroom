@@ -72,7 +72,7 @@ app.listen(port, process.env.HOST || '127.0.0.1', () => {
   console.log(`FairRoom scout server running on http://localhost:${port}`);
 });
 
-if (process.env.SCOUT_SCHEDULER_ENABLED === 'true') {
+if (process.env.DEMO_MODE !== 'true' && process.env.SCOUT_SCHEDULER_ENABLED === 'true') {
   let busy=false;
   const tick=async()=>{if(busy)return;busy=true;try{const db=await getDb();await scheduledCheck(db);}catch(e){console.error('Scheduled catalog check failed');}finally{busy=false;}};
   void tick();setInterval(tick,60000).unref();

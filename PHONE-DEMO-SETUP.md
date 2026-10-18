@@ -1,3 +1,5 @@
+> Optional live mode: set `DEMO_MODE=false`. The keyless submission demo uses the README quick start and does not require these services. Live behavior is not verified by mock/API tests.
+
 # Three-person iMessage demo
 
 1. With your sister’s agreement, set `FAIRROOM_SISTER_PHONE=+1...` in `.env`. Keep your existing owner and brother numbers.

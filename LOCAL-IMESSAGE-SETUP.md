@@ -1,17 +1,19 @@
+> Optional live mode: set `DEMO_MODE=false`. The keyless submission demo uses the README quick start and does not require these services. Live behavior is not verified by mock/API tests.
+
 # Free iMessage group demo on a Mac
 
 This optional bridge uses Photon's open-source Spectrum local adapter, separately from the Photon 2.0 Beta cloud API. It supports existing iMessage groups, using the Apple identity signed into Messages on the Mac. It does not give you a new phone number. No provider subscription is needed for this local bridge; your Mac must remain awake and online.
 
 ## Identity
 
-For a distinct FairRoom participant, use a spare Mac or a separate macOS user signed into Messages with a separate Apple Account. Invite that account's iMessage email address to the test group. Do not sign out of your main Apple account merely to try the demo. If you use your personal Messages account, agent replies appear as you; a second person must send commands because outgoing messages are ignored.
+For a distinct FairRoom participant, use a spare Mac or a separate macOS user signed into Messages with a separate Apple Account. Invite that account's iMessage email address to the test group. Do not sign out of your main Apple account merely to try the demo. If you use your personal Messages account, agent replies appear as you; the fixture bridge ignores outgoing messages; the explicitly configured real-household mode also accepts the owner’s prefixed commands.
 
 ## Permissions and group selection
 
 1. Open Messages in the Mac user that will host the agent and confirm manual send/receive works.
 2. Manually create the test group with the agent account and two human testers. The local adapter cannot create groups.
 3. Grant the terminal you will run the app from Full Disk Access in System Settings → Privacy & Security. Quit/reopen that terminal after changing access. macOS may also prompt for permission to control Messages when sending; approve it for this demo if desired.
-4. From fairroom-final, run `node --import tsx local-bridge/list-groups.ts`. This explicitly reads group titles/IDs, not message bodies, and sends nothing. Copy only the intended group's ID.
+4. From the git root (`fairroom-final/current code`), run `node --import tsx local-bridge/list-groups.ts`. This explicitly reads group titles/IDs, not message bodies, and sends nothing. Copy only the intended group's ID.
 5. The SDK's access is broader than the app's chat filter: it can access the Messages database. A dedicated account avoids exposing personal conversations. FairRoom discards other chats before its agent handler and has telemetry disabled.
 
 ## Configure .env

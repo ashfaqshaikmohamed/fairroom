@@ -12,9 +12,9 @@ FACTORY_API_KEY=replace_with_your_key
 FACTORY_ENABLED=true
 ```
 
-The official SDK and project-local Droid CLI are already installed. No global installation is needed on this Mac. Optional `FACTORY_MODEL` selects an account-supported model; leave it unset to use the account default. Optional `FACTORY_DROID_PATH` overrides the project-local executable.
+`npm install` installs the SDK and project-local Droid CLI. No global installation is needed. Optional `FACTORY_MODEL` selects an account-supported model; leave it unset to use the account default. Optional `FACTORY_DROID_PATH` overrides the project-local executable.
 
-Restart FairRoom, then open http://localhost:4300/ . Choose Meet FairRoom → preview as Maya (organizer) → Homes → Before you commit → Get independent review. This button calls Factory; it is not a prerecorded result. It may take up to 90 seconds. The returned review is cached for one hour. The public ngrok page can read completed reviews, but cannot trigger paid reviews. Up to six new review attempts per server process/hour are permitted.
+Restart FairRoom, then open http://localhost:3000/ . Choose Meet FairRoom → preview as Alex (organizer; Maya in legacy fixture mode) → Homes → Before you commit → Get independent review. This button calls Factory; it is not a prerecorded result. It may take up to 90 seconds. The returned review is cached for one hour. The public ngrok page can read completed reviews, but cannot trigger paid reviews. Up to six new review attempts per server process/hour are permitted.
 
 The reviewer reads public saved listing evidence, runs the deterministic fact checks, then submits a summary and broker questions using three bounded tools. Other discovered tools are disabled before the run. No private roommate surveys are passed into the review. This is evidence review, not proof that a property is legitimate or currently available. Live behavior is not verified until the first authenticated run succeeds.
 
@@ -54,11 +54,11 @@ Stop the existing FairRoom server with Ctrl+C in its terminal. In this project f
 npm run dev
 ```
 
-Keep ngrok running separately. Don't start a second FairRoom process against the same database. If Codex is hosting the existing process, tell it the keys are saved so it can restart that process.
+A tunnel is only needed for a separately configured live phone flow. Don't start a second FairRoom process against the same database. If Codex is hosting the existing process, tell it the keys are saved so it can restart that process.
 
 ## Current verification
-- Local iMessage greeting: delivered and confirmed by user.
-- Factory SDK/CLI: installed; key absent at last check; no live review yet.
-- Chalk routing and evaluation runner: implemented; credentials absent at last check; no live gateway evaluation yet.
+- Live iMessage: outside the submission audit; no current delivery verification.
+- Factory SDK/CLI: installed; requires local credentials; no live review yet.
+- Chalk routing and evaluation runner: implemented; requires local credentials; no live gateway evaluation yet.
 - Listing evidence checks, scoped API access and mock gateway routing: tested.
 - Daytona: removed from scope and dependencies.

@@ -1,8 +1,8 @@
 # FairRoom
 
-A roommate group's housing search, in one conversation. Built for the Photon 2.0 challenge.
+A roommate group's housing search, in one conversation. Hackathon demo with optional messaging integrations.
 
-FairRoom helps roommate groups find a home together: each person enters private preferences (budget, cities, move-in dates, must-haves), the app ranks saved listings against the whole group's requirements, and proposes a fair room-by-room rent split. Everything runs through a shared iMessage conversation or the web interface.
+FairRoom helps roommate groups find a home together: each person enters private preferences (budget, cities, move-in dates, must-haves), the app ranks saved listings against the whole group's requirements, and proposes a fair room-by-room rent split. The default submission demo runs in the web interface. Real iMessage requires a separately configured transport and device verification.
 
 ## Tech stack
 
@@ -16,7 +16,7 @@ FairRoom helps roommate groups find a home together: each person enters private 
 
 ## Quick start — demo mode (no keys required)
 
-Demo mode seeds the database with three fake roommates (Alex, Sam, Jordan), fake phone numbers, sample survey responses, and sample listings. It skips the iMessage bridge, Photon, and ngrok entirely.
+Demo mode seeds the database with three fake roommates (Alex, Sam, Jordan), fake phone numbers, sample survey responses, and the tested sample listings. Alex and Jordan are ready; complete Sam’s survey to generate the shortlist. It disables hosted messaging, the local bridge and the scheduler; no tunnel is needed.
 
 ```sh
 # From this folder
@@ -27,7 +27,7 @@ npm run dev
 
 Open http://localhost:3000. If port 3000 is occupied: `PORT=4200 npm run dev`.
 
-No accounts, API keys, or phone numbers are needed. The web app runs end to end with `npm install && npm run dev`.
+No accounts, API keys, or phone numbers are needed. Copy `.env.example` before starting; an omitted `.env` does not enable demo mode automatically. Click **Meet FairRoom**, complete Sam’s preferences, then explore Homes, Review split, and Conversation.
 
 ## Run locally — real iMessage mode
 
@@ -37,10 +37,10 @@ For live iMessage messaging, you need a Photon 2.0 Beta project with a dedicated
 2. Ask Photon for a dedicated group-capable iMessage line.
 3. Copy `.env.example` to `.env` and set:
    - `PHOTON_API_KEY`, `PHOTON_PROJECT_ID`, `PHOTON_AGENT_HANDLE`, `PUBLIC_APP_URL`
-   - `PHOTON_ENABLED=true`
+   - `DEMO_MODE=false`, `PHOTON_ENABLED=true`
 4. `npm install && npm run dev`
 
-See `ACCOUNTS-AND-KEYS.md` and `MESSAGING-SETUP.md` for full setup details.
+The separate Mac bridge sends from the signed-in Mac’s Messages identity, not a new agent number. Install its dependencies with `npm install --prefix local-bridge`. See `LOCAL-IMESSAGE-SETUP.md`. Live transport setup is outside the keyless submission demo.
 
 ## Features
 
@@ -69,7 +69,7 @@ The rent split is a transparent proposal — not a mathematical envy-free guaran
 npm install        # Install dependencies
 npm run dev        # Start dev server (http://localhost:3000)
 npm run build      # Build for production
-npm run start      # Start production server (NODE_ENV=production npm start)
+NODE_ENV=production npm start  # Serve dist after npm run build
 npm run lint       # TypeScript type check (tsc --noEmit)
 npm test           # Run engine tests (matching, messaging, rent split, group plan)
 npm run test:api   # Run API tests
@@ -95,4 +95,3 @@ Includes matching, room allocation, exact cents, privacy, acceptance revisions, 
 - Never use `VITE_` prefixes for secrets — that would embed them in the browser bundle
 - Never paste keys, phone numbers, or invite tokens into chat, GitHub, or screenshots
 - Build a clean archive excluding `.env`, databases, receipts, `node_modules`, `dist`, and caches
-# fairroom

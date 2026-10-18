@@ -15,3 +15,6 @@ shared=true;await assert.rejects(()=>verifyPhotonGroup(options.spaceId,options.r
 fail=true;assert.equal((await sendPhotonMessage(options,client)).deliveryStatus,'unconfirmed');
 process.env.PHOTON_ENABLED='false';calls=[];assert.equal((await sendPhotonMessage(options,client)).ok,false);assert.equal(calls.length,0);
 console.log('Photon provider checks passed: roster, shared-line rejection, sender, stable key, uncertain outcome, disabled zero I/O.');
+
+process.env.PHOTON_ENABLED='true';process.env.DEMO_MODE='true';calls=[];assert.equal((await sendPhotonMessage(options,client)).ok,false);assert.equal(calls.length,0);
+console.log('Demo mode blocks hosted sends even when Photon is enabled.');
