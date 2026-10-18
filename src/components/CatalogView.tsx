@@ -1,0 +1,22 @@
+import React,{useEffect,useMemo,useState} from 'react';
+import {ArrowLeft,ArrowUpRight,Search} from 'lucide-react';
+import {useRouter} from '../router';
+import type {Listing} from '../types';
+import {formatCents} from '../engine/matching';
+export function CatalogView(){
+ const {navigate}=useRouter();const [homes,setHomes]=useState<Listing[]>([]);const [error,setError]=useState('');const [loading,setLoading]=useState(true);
+ const [query,setQuery]=useState('');const [beds,setBeds]=useState('all');const [city,setCity]=useState('all');const [budget,setBudget]=useState('');const [limit,setLimit]=useState(24);
+ useEffect(()=>{const controller=new AbortController();fetch('/api/public/catalog',{signal:controller.signal}).then(r=>{if(!r.ok)throw Error('Could not load homes. Please refresh.');return r.json();}).then(d=>setHomes(d.listings)).catch(e=>{if(e.name!=='AbortError')setError(e.message);}).finally(()=>setLoading(false));return()=>controller.abort();},[]);
+ const filtered=useMemo(()=>homes.filter(h=>(city==='all'||h.city===city)&&(beds==='all'||(beds==='4+'?h.bedrooms>=4:h.bedrooms===Number(beds)))&&(!budget||h.baseRentCents<=Number(budget)*100)&&`${h.address} ${h.neighborhood} ${h.city}`.toLowerCase().includes(query.toLowerCase())).sort((a,b)=>a.baseRentCents-b.baseRentCents),[homes,query,beds,city,budget]);
+ useEffect(()=>setLimit(24),[query,beds,city,budget]);
+ function clear(){setQuery('');setCity('all');setBeds('all');setBudget('');}
+ return <main className="catalog-page"><header className="catalog-nav"><button className="wordmark" onClick={()=>navigate('/')}>fairroom<span>.</span></button><button className="detail-link" onClick={()=>navigate('/setup')}>Find a home together <ArrowUpRight size={16}/></button></header>
+ <section className="catalog-intro"><p className="eyebrow">Cambridge & nearby</p><h1>somewhere that<br/>feels like yours.</h1><p>Explore the homes. Bring your people.</p></section>
+ <section className="catalog-filters" aria-label="Filter homes"><label className="catalog-search"><span>Neighborhood or listing</span><div><Search size={17}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Try Harvard Square"/></div></label><label>City<select aria-label="City" value={city} onChange={e=>setCity(e.target.value)}><option value="all">All nearby cities</option>{Array.from(new Set(homes.map(h=>h.city))).sort().map(c=><option key={c}>{c}</option>)}</select></label><label>Bedrooms<select aria-label="Bedrooms" value={beds} onChange={e=>setBeds(e.target.value)}>{[['all','Any size'],['0','Studio'],['1','1 bedroom'],['2','2 bedrooms'],['3','3 bedrooms'],['4+','4+ bedrooms']].map(([v,n])=><option value={v} key={v}>{n}</option>)}</select></label><label>Max base rent<input type="number" min="0" step="100" value={budget} onChange={e=>setBudget(e.target.value)} placeholder="Any budget"/></label></section>
+ <div className="catalog-count"><span aria-live="polite">{loading?'Opening the catalog…':`${filtered.length} homes`}</span><span>Saved broker listings · confirm availability</span></div>
+ {error&&<p role="alert" className="notice">{error}</p>}
+ <div className="catalog-grid">{filtered.slice(0,limit).map(h=><button className="catalog-card" key={h.id} onClick={()=>navigate(`/listing/${h.id}`)}><div className="catalog-image"><img loading="lazy" src={h.photos[0]||'/images/unavailable.svg'} onError={e=>{e.currentTarget.onerror=null;e.currentTarget.src='/images/unavailable.svg';}} alt={h.address}/><span>{h.bedrooms===0?'Studio':`${h.bedrooms} bed${h.bedrooms===1?'':'s'}`} · {h.bathrooms} bath{h.bathrooms!==1?'s':''}</span></div><div className="catalog-card-copy"><p>{h.neighborhood} · {h.city}</p><h2>{h.address}</h2><footer><strong>{formatCents(h.baseRentCents)}<small> / month</small></strong><ArrowUpRight size={19}/></footer></div></button>)}</div>
+ {!loading&&!error&&!filtered.length&&<section className="empty-homes"><h2>A little more room to search.</h2><p>No saved home fits these filters. Try a nearby neighborhood or a different budget.</p><button className="secondary-button" onClick={clear}>Clear filters</button></section>}
+ {filtered.length>limit&&<button className="secondary-button catalog-more" onClick={()=>setLimit(n=>n+24)}>Show more homes ({filtered.length-limit} remaining)</button>}
+ <footer className="catalog-footer"><button className="detail-link" onClick={()=>navigate('/')}><ArrowLeft size={15}/>Back to FairRoom</button><p>Prices exclude unlisted fees. Some brokers publish a neighborhood instead of a street address.</p></footer></main>;
+}

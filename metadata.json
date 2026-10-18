@@ -1,0 +1,6 @@
+{
+  "name": "FairRoom",
+  "description": "Group housing scout for Cambridge and nearby communities. Finds homes that fit your whole group and sends recommendations to your group chat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,9 @@
+import {useTutorial} from './Tutorial';
+import React,{useState} from 'react';
+import {useRouter} from '../router';
+import {useApp} from '../context/AppContext';
+export const WorkspaceLayout:React.FC<{children:React.ReactNode;activeTab:'matches'|'group'|'scout';groupId:string}>=({children,activeTab,groupId})=>{
+ const {openTutorial}=useTutorial();
+ const {navigate}=useRouter();const {group,members,currentMember,isDemoGroup,resetDemoData,switchDemoMember,isLoading}=useApp();const [reset,setReset]=useState(false);
+ return <div className="workspace"><header className="workspace-header"><button className="wordmark" onClick={()=>navigate('/')}>fairroom<span>.</span></button><nav aria-label="Group navigation">{[['scout','conversation'],['matches','homes'],['group','roommates']].map(([tab,label])=><button key={tab} aria-current={activeTab===tab?'page':undefined} onClick={()=>navigate(`/group/${groupId}/${tab}`)}>{label}</button>)}</nav><div className="workspace-identity"><span className="avatar">{currentMember?.displayName?.[0]||'F'}</span><span>{group?.name||'Your group'}</span></div></header><main className="workspace-main">{children}</main><footer className="workspace-footer"><button className="workspace-tutorial" onClick={openTutorial}>Tutorial & demo</button><span>{isDemoGroup?'Sample group':'Your group'} · Cambridge & nearby</span>{isDemoGroup&&<div className="demo-controls"><label>View as <select aria-label="Preview as" value={currentMember?.id||members[0]?.id||''} onChange={e=>switchDemoMember(e.target.value)}>{members.map(m=><option key={m.id} value={m.id}>{m.displayName}</option>)}</select></label><button disabled={isLoading} onClick={()=>setReset(!reset)}>Reset demo</button>{reset&&<><span>Clear the sample conversation?</span><button onClick={async()=>{await resetDemoData();setReset(false);navigate(`/group/${groupId}/scout`);}}>Confirm reset</button><button onClick={()=>setReset(false)}>Cancel</button></>}</div>}</footer></div>;
+};

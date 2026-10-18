@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {digestDue,localClock} from '../src/server/notificationSchedule';
+const settings={enabled:true,time:'09:00',timeZone:'America/New_York',urgent:false};
+assert.equal(digestDue(new Date('2026-10-17T13:00:00Z'),settings,null),true);
+assert.equal(digestDue(new Date('2026-10-17T13:00:00Z'),settings,'2026-10-17'),false);
+assert.equal(digestDue(new Date('2026-10-17T12:59:00Z'),settings,null),false);
+assert.equal(digestDue(new Date('2026-10-17T13:15:00Z'),settings,null),false);
+assert.equal(digestDue(new Date('2026-11-17T14:00:00Z'),settings,null),true);
+assert.equal(digestDue(new Date('2026-11-17T14:00:00Z'),{...settings,enabled:false},null),false);
+assert.equal(localClock(new Date('2026-10-18T02:00:00Z'),settings.timeZone).day,'2026-10-17');
+console.log('Schedule checks passed: 9 AM Eastern, DST, duplicate day, disabled state, local date, catch-up window.');

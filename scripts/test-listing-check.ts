@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {checkListing,sampleListingReview} from '../src/server/listingCheck';
+import {factoryReady} from '../src/server/integrations/factory';
+const fixtures=JSON.parse(fs.readFileSync('data/demo-fixtures.json','utf8'));
+const listing=fixtures.sampleHomes[0];
+const base=checkListing(listing);
+assert.equal(base.sample,true);assert.equal(base.checks.find(c=>c.id==='source')?.status,'review');
+const missing=structuredClone(listing);missing.rooms=[];missing.brokerFeeCents=undefined;missing.securityDepositCents=undefined;missing.sharedCostComponents=[];
+const report=checkListing(missing);assert.equal(report.checks.filter(c=>c.status==='review').length,4);
+assert.match(report.checks.find(c=>c.id==='movein')!.detail,/missing fee as zero/);
+assert.ok(report.questions.some(q=>q.includes('floor plan')));
+const unknown=structuredClone(listing);unknown.sharedCostComponents=[{name:'Heat',amountCents:0,status:'unknown'}];
+assert.match(checkListing(unknown).checks.find(c=>c.id==='costs')!.detail,/Heat/);
+process.env.FACTORY_ENABLED='false';process.env.FACTORY_API_KEY='configured-but-disabled';assert.equal(factoryReady(),false);
+console.log('PASS: source uncertainty, missing room facts, unknown costs, no invented zero fees, explicit provider enablement.');
+
+const sample=sampleListingReview(missing);
+assert.equal(sample.provider,'sample');assert.ok(sample.summary.includes('room dimensions'));
+assert.ok(!('sessionId' in sample));assert.ok(!('toolCalls' in sample));
+assert.throws(()=>sampleListingReview({...listing,id:'real-home'}));
+console.log('PASS: sample review uses actual gaps, cannot claim a provider session, rejects real homes.');

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-courtyard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F4F1EA"/>
+      <stop offset="100%" stop-color="#E8E2D5"/>
+    </linearGradient>
+    <pattern id="brick-pat" width="20" height="10" patternUnits="userSpaceOnUse">
+      <rect width="20" height="10" fill="none" stroke="#D8D2C5" stroke-width="0.75"/>
+      <line x1="10" y1="0" x2="10" y2="10" stroke="#D8D2C5" stroke-width="0.75"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bg-courtyard)"/>
+  
+  <!-- Subtle architectural grid -->
+  <rect x="40" y="40" width="720" height="420" fill="none" stroke="#DEE2D8" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Building Base / Ground -->
+  <line x1="80" y1="420" x2="720" y2="420" stroke="#52634D" stroke-width="3"/>
+  <rect x="120" y="140" width="560" height="280" fill="#FAFBF9" stroke="#3A4036" stroke-width="2"/>
+  <rect x="120" y="140" width="560" height="280" fill="url(#brick-pat)" opacity="0.3"/>
+
+  <!-- Roofline / Cornice -->
+  <polygon points="100,140 400,60 700,140" fill="#EAE5DA" stroke="#3A4036" stroke-width="2"/>
+  <line x1="100" y1="140" x2="700" y2="140" stroke="#52634D" stroke-width="3"/>
+  
+  <!-- Bay Windows (Inman Sq Victorian Style) -->
+  <polygon points="160,180 260,180 250,380 170,380" fill="#FFFFFF" stroke="#3A4036" stroke-width="1.5"/>
+  <line x1="210" y1="180" x2="210" y2="380" stroke="#52634D" stroke-width="1.5"/>
+  <line x1="165" y1="280" x2="255" y2="280" stroke="#52634D" stroke-width="1.5"/>
+
+  <!-- Center Entrance & Courtyard Balcony -->
+  <rect x="340" y="280" width="120" height="140" fill="#EAF2EB" stroke="#3A4036" stroke-width="2"/>
+  <line x1="400" y1="280" x2="400" y2="420" stroke="#3A4036" stroke-width="1.5"/>
+  <rect x="320" y="190" width="160" height="70" fill="#FFFFFF" stroke="#52634D" stroke-width="1.5"/>
+  <!-- Balcony railing -->
+  <line x1="310" y1="260" x2="490" y2="260" stroke="#3A4036" stroke-width="2"/>
+  <line x1="330" y1="240" x2="330" y2="260" stroke="#3A4036" stroke-width="1.5"/>
+  <line x1="360" y1="240" x2="360" y2="260" stroke="#3A4036" stroke-width="1.5"/>
+  <line x1="400" y1="240" x2="400" y2="260" stroke="#3A4036" stroke-width="1.5"/>
+  <line x1="440" y1="240" x2="440" y2="260" stroke="#3A4036" stroke-width="1.5"/>
+  <line x1="470" y1="240" x2="470" y2="260" stroke="#3A4036" stroke-width="1.5"/>
+
+  <!-- Right Windows -->
+  <polygon points="540,180 640,180 630,380 550,380" fill="#FFFFFF" stroke="#3A4036" stroke-width="1.5"/>
+  <line x1="590" y1="180" x2="590" y2="380" stroke="#52634D" stroke-width="1.5"/>
+  <line x1="545" y1="280" x2="635" y2="280" stroke="#52634D" stroke-width="1.5"/>
+
+  <!-- Courtyard Trees & Foliage -->
+  <circle cx="100" cy="380" r="35" fill="#52634D" opacity="0.8"/>
+  <circle cx="130" cy="360" r="25" fill="#445340" opacity="0.9"/>
+  <circle cx="700" cy="380" r="35" fill="#52634D" opacity="0.8"/>
+  <circle cx="670" cy="360" r="25" fill="#445340" opacity="0.9"/>
+
+  <!-- Typographic Label -->
+  <rect x="60" y="445" width="680" height="35" rx="4" fill="#FFFFFF" stroke="#DEE2D8"/>
+  <text x="75" y="468" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold" fill="#242823">142 HAMPSHIRE ST · INMAN SQ, CAMBRIDGE</text>
+  <text x="705" y="468" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="11" fill="#52634D">ARCHITECTURAL ELEVATION · SAMPLE HOME</text>
+</svg>

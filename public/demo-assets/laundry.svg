@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-laundry" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCFAF5"/>
+      <stop offset="100%" stop-color="#F2ECE0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#bg-laundry)"/>
+  <rect x="40" y="40" width="720" height="420" fill="none" stroke="#E8DAC2" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Mid-century Building Elevation -->
+  <line x1="80" y1="420" x2="720" y2="420" stroke="#8C6218" stroke-width="3"/>
+  <rect x="140" y="130" width="520" height="290" fill="#FFFFFF" stroke="#3A4036" stroke-width="2"/>
+
+  <!-- Mid-century windows -->
+  <rect x="170" y="170" width="200" height="90" fill="#FAFBF9" stroke="#3A4036" stroke-width="1.5"/>
+  <rect x="430" y="170" width="200" height="90" fill="#FAFBF9" stroke="#3A4036" stroke-width="1.5"/>
+  <rect x="170" y="300" width="200" height="90" fill="#FAFBF9" stroke="#3A4036" stroke-width="1.5"/>
+  <rect x="430" y="300" width="200" height="90" fill="#FAFBF9" stroke="#3A4036" stroke-width="1.5"/>
+
+  <!-- Needs Verification Badge -->
+  <rect x="200" y="60" width="400" height="45" rx="6" fill="#FAF3E6" stroke="#8C6218" stroke-width="1.5"/>
+  <circle cx="230" cy="82" r="14" fill="#8C6218"/>
+  <text x="230" y="88" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="bold" fill="#FFFFFF">?</text>
+  <text x="255" y="87" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold" fill="#8C6218">NEEDS VERIFICATION: UNVERIFIED LAUNDRY</text>
+
+  <!-- Typographic Label -->
+  <rect x="60" y="445" width="680" height="35" rx="4" fill="#FFFFFF" stroke="#DEE2D8"/>
+  <text x="75" y="468" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold" fill="#242823">112 BEACON ST · SOMERVILLE</text>
+  <text x="705" y="468" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="11" fill="#8C6218">UNRESOLVED BROKER AMENITY FACT · SAMPLE HOME</text>
+</svg>

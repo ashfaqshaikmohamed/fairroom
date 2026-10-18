@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-outside" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBF4F4"/>
+      <stop offset="100%" stop-color="#EFE6E6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="500" fill="url(#bg-outside)"/>
+  <rect x="40" y="40" width="720" height="420" fill="none" stroke="#EAC4C1" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Suburban House Elevation -->
+  <line x1="80" y1="420" x2="720" y2="420" stroke="#9E372B" stroke-width="3"/>
+  <polygon points="120,200 400,90 680,200" fill="#EAE5DA" stroke="#3A4036" stroke-width="2"/>
+  <rect x="160" y="200" width="480" height="220" fill="#FFFFFF" stroke="#3A4036" stroke-width="2"/>
+
+  <!-- Windows -->
+  <rect x="200" y="240" width="90" height="80" fill="#FAFBF9" stroke="#3A4036" stroke-width="1.5"/>
+  <rect x="510" y="240" width="90" height="80" fill="#FAFBF9" stroke="#3A4036" stroke-width="1.5"/>
+  <rect x="350" y="280" width="100" height="140" fill="#F8F7F3" stroke="#3A4036" stroke-width="2"/>
+
+  <!-- Location Conflict Indicator -->
+  <rect x="220" y="55" width="360" height="45" rx="6" fill="#FBEFEF" stroke="#9E372B" stroke-width="1.5"/>
+  <circle cx="250" cy="77" r="14" fill="#9E372B"/>
+  <text x="250" y="82" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="14" font-weight="bold" fill="#FFFFFF">📍</text>
+  <text x="275" y="82" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold" fill="#9E372B">LOCATION: OUTSIDE SHARED AREA</text>
+
+  <!-- Typographic Label -->
+  <rect x="60" y="445" width="680" height="35" rx="4" fill="#FFFFFF" stroke="#DEE2D8"/>
+  <text x="75" y="468" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold" fill="#242823">45 GROVE ST · WEST MEDFORD</text>
+  <text x="705" y="468" text-anchor="end" font-family="'JetBrains Mono', monospace" font-size="11" fill="#9E372B">OUTSIDE GROUP'S SEARCH BOUNDS · SAMPLE HOME</text>
+</svg>

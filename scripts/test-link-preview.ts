@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {injectListingPreview} from '../src/server/linkPreview';
+const home=JSON.parse(readFileSync('data/demo-fixtures.json','utf8')).sampleHomes[0];
+const template=readFileSync('index.html','utf8');
+const html=injectListingPreview(template,home,'https://example.test');
+assert.match(html,/og:image/);assert.match(html,/Fictional demo home/);assert.match(html,/https:\/\/example.test\/listing\//);
+assert.equal((html.match(/property="og:title"/g)||[]).length,1);
+assert.ok(!html.includes('privateCapCents'));
+assert.ok(injectListingPreview(template,{...home,address:'<script>alert("x")</script>'},'https://example.test').includes('&lt;script&gt;'));
+console.log('Link previews passed: canonical URLs, image, sample disclosure, escaping, no duplicate metadata.');

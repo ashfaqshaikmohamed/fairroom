@@ -1,0 +1,12 @@
+{
+  "name": "fairroom-local-imessage",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@spectrum-ts/core": "12.12.0",
+    "@spectrum-ts/imessage-local": "12.11.0"
+  },
+  "scripts": {
+    "postinstall": "node patch-sdk.mjs"
+  }
+}
